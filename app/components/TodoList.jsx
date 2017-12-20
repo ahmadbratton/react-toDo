@@ -1,17 +1,21 @@
 var React = require("react");
-var Todo = require("Todo");
-var TodoList = React.createClass({
+var {connect} = require("react-redux");
+import  Todo from "Todo"
+var TodoAPI = require("TodoAPI");
+
+
+export var TodoList = React.createClass({
 render: function () {
-  var {todos} = this.props;
+  var {todos, showCompleted, searchText } = this.props;
   var renderTodos = () => {
     if(todos.length === 0){
       return(
         <p className="container_message" > nothing to do </p>
       )
     }
-    return todos.map((todo) => {
+    return TodoAPI.filterTodos(todos, showCompleted, searchText).map((todo) => {
       return(
-      <Todo key={todo.id} {...todo} onToggle={this.props.onToggle} />
+      <Todo key={todo.id} {...todo}  />
       )
     })
   }
@@ -22,4 +26,8 @@ render: function () {
   )
 }
 });
-module.exports = TodoList;
+export default connect(
+  (state) => {
+    return state;
+  }
+)(TodoList);
